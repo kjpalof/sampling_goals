@@ -72,3 +72,14 @@ recruits_pow %>%
 #save 
 write.csv(recruits_pow, file = "./output/GKCrecruit_power.csv")
 
+## crabs sampled per trip review ---------------------
+# currently set at 50, is there a minimium where the trip is not useful?
+ggplot(recruit_by_trip2, aes(tot_crab, percent)) +geom_point() +geom_smooth(method = "lm")
+
+# remove sample sizes less than 25 and see if results are different
+recruit_by_trip2 %>%
+  filter(tot_crab > 20) %>% 
+  group_by(SEASON, I_FISHERY) %>%
+  summarise(ntrip = n(), mean_percentR = mean(percent), sd_percentR = sd(percent)) -> recruits.20
+
+diff <- recruits$mean_percentR - recruits.20$mean_percentR
