@@ -24,7 +24,7 @@ dat %>% bind_rows(dat2) -> dat3
 ### Summarise data by trip for the fishery, keep season, location (I_FISHERY), and trip # 
 #unique(dat$SEASON) use season NOT year
 # all recruit classes by trip
-dat %>%
+dat3 %>%
   group_by(SEASON, I_FISHERY, TRIP_NO, RECRUIT_STATUS) %>%
   summarise(N = n()) -> by_trip
 # total crab by trip
@@ -45,7 +45,7 @@ recruit_by_trip2 %>%
   summarise(ntrip = n(), mean_percentR = mean(percent), sd_percentR = sd(percent)) -> recruits
 
 recruits %>%
-  filter(SEASON == "Oct2015 - Sep16")
+  filter(SEASON == "Oct2016 - Sep17")
 
 # Power analysis 
 # t-test - one sample
@@ -68,15 +68,15 @@ crab_power(0.10, recruits$sd_percentR[1])
 
   
 # power using average of last 3 years
-years3 <- c("Oct2013 - Sep14", "Oct2014 - Sep15", "Oct2015 - Sep16")
+years3 <- c("Oct2014 - Sep15", "Oct2015 - Sep16", "Oct2016 - Sep17")
 recruits_pow %>%
   filter(SEASON %in% years3) %>%
   group_by(I_FISHERY) %>%
   summarise (mean(x0.10), mean(x0.08), mean (x0.06))->last3_recuits_pow
 
 #save 
-write.csv(recruits_pow, file = "./output/GKCrecruit_power.csv")
-
+write.csv(recruits_pow, file = "./output/GKCrecruit_power17.csv")
+write.csv(last3_recuits_pow, file = "./output/GKC_last3_power17.csv")
 ## crabs sampled per trip review ---------------------
 # currently set at 50, is there a minimium where the trip is not useful?
 ggplot(recruit_by_trip2, aes(tot_crab, percent)) +geom_point() +geom_smooth(method = "lm")
