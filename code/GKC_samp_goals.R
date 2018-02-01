@@ -1,9 +1,10 @@
-#K.Palof ADF&G
-#objective: determin how many trips to sample for lenghts in the crab fisheries (golden, tanner, 
+#K.Palof ADF&G                updated for 2018 goals 2-1-18
+#objective: determine how many trips to sample for lenghts in the crab fisheries (golden, tanner, 
 #         and dungeness - seperately) to be able to tell if the % of recruits changes from year to year.
 #statistical objective: 
 #power analysis to determine the number of trips to sample from each management area
 #         to detect
+
 
 rm(list = ls()) # clear workspace since data frames have same names
 #####Load Packages ---------------------------------
