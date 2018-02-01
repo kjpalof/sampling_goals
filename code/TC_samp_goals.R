@@ -1,4 +1,4 @@
-#K.Palof ADF&G
+#K.Palof ADF&G            udpated 2-1-18
 #objective: determin how many trips to sample for lenghts in the crab fisheries (golden, tanner, 
 #         and dungeness - seperately) to be able to tell if the % of recruits changes from year to year.
 #statistical objective: 
@@ -16,12 +16,16 @@ library(broom)
 #####Load Data ---------------------------------------------------
 # change input file for each
 dat <- read.csv("./data/tanner_dockside_13_16.csv")
+dat2 <- read.csv("./data/tannerdocside_17.csv")
 
 ##### Data manipulation ---------------
+# add 2017 data
+dat %>% bind_rows(dat2) -> dat3
+
 ### Summarise data by trip for the fishery, keep season, location (I_FISHERY), and trip # 
 #unique(dat$SEASON) use season NOT year
 # all recruit classes by trip
-dat %>%
+dat3 %>%
   group_by(SEASON, I_FISHERY, DISTRICT, TRIP_NO, RECRUIT_STATUS) %>%
   summarise(N = n()) -> by_trip
 # total crab by trip
@@ -42,7 +46,7 @@ recruit_by_trip2 %>%
   summarise(ntrip = n(), mean_percentR = mean(percent), sd_percentR = sd(percent)) -> recruits
 
 recruits %>%
-  filter(SEASON == "Sep2015 - Aug16")
+  filter(SEASON == "Sep2016 - Aug17")
 
 # Power analysis --------------
 # t-test - one sample
@@ -50,8 +54,10 @@ tidy(pwr.t.test( d= (0.10/0.164196), sig.level = 0.05, power = 0.85, type = "one
 
 # d is difference to detect which is the difference / S.D.
 
+
 # using dplyr and broom
-recruits %>% na.omit() %>% rowwise %>% 
+recruits %>% na.omit() %>% 
+  rowwise %>% 
   mutate(x0.10 = crab_power(0.10, sd_percentR), x0.08 = crab_power(0.08, sd_percentR), 
          x0.06=crab_power(0.06, sd_percentR))-> recruits_pow
 # writing a function
@@ -64,7 +70,10 @@ crab_power(0.10, recruits$sd_percentR[1])
 
 # power using average of last 3 years
 # this data set only has the last 3 years so no need for filtering.
+years3 <- c("Sep2014 - Aug15", "Sep2015 - Aug16", "Sep2016 - Aug17")
+
 recruits_pow %>%
+  filter(SEASON %in% years3) %>%
   group_by(I_FISHERY) %>%
   summarise (mean(x0.10), mean(x0.08), mean (x0.06))->last3_recuits_pow
 
