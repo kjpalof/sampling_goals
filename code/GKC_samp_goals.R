@@ -15,8 +15,12 @@ library(broom)
 #####Load Data ---------------------------------------------------
 # change input file for each
 dat <- read.csv("./data/gkc_dockside_13_16.csv")
+dat2 <- read.csv("./data/gkcdockside_17.csv")
 
 ##### Data manipulation ---------------
+# add 2017 data
+dat %>% bind_rows(dat2) -> dat3
+
 ### Summarise data by trip for the fishery, keep season, location (I_FISHERY), and trip # 
 #unique(dat$SEASON) use season NOT year
 # all recruit classes by trip
