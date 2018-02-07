@@ -78,5 +78,5 @@ recruits_pow %>%
   summarise (mean(x0.10), mean(x0.08), mean (x0.06))->last3_recuits_pow
 
 #save 
-write.csv(recruits_pow, file = "./output/TC_recruit_power.csv")
-write.csv(last3_recuits_pow, file = "./output/TC_last3years_sample_size.csv")
+write.csv(recruits_pow, file = "./output/TC_recruit_power_18.csv")
+write.csv(last3_recuits_pow, file = "./output/TC_last3years_sample_size_18.csv")
