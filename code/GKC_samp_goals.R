@@ -25,11 +25,11 @@ dat %>% bind_rows(dat2) -> dat3
 #unique(dat$SEASON) use season NOT year
 # all recruit classes by trip
 dat3 %>%
-  group_by(SEASON, I_FISHERY, TRIP_NO, RECRUIT_STATUS) %>%
+  group_by(YEAR, SEASON, I_FISHERY, TRIP_NO, RECRUIT_STATUS) %>%
   summarise(N = n()) -> by_trip
 # total crab by trip
 by_trip %>%
-  group_by(SEASON, I_FISHERY, TRIP_NO)%>%
+  group_by(YEAR, SEASON, I_FISHERY, TRIP_NO)%>%
   summarise(tot_crab = sum(N)) -> total_by_trip
 # % sampled of each recruit class by trip
 by_trip %>%
@@ -41,13 +41,13 @@ by_trip2 %>%
 # summarize by season and fishery area
 #       these match those calculated in .JMP files in previous years
 recruit_by_trip2 %>%
-  group_by(SEASON, I_FISHERY) %>%
+  group_by(YEAR, SEASON, I_FISHERY) %>%
   summarise(ntrip = n(), mean_percentR = mean(percent), sd_percentR = sd(percent)) -> recruits
 
 recruits %>%
   filter(SEASON == "Oct2016 - Sep17")
 
-# Power analysis 
+## Power analysis ----
 # t-test - one sample
 tidy(pwr.t.test( d= (0.10/0.164196), sig.level = 0.05, power = 0.85, type = "one.sample", alternative = "two.sided"))
 
@@ -88,3 +88,16 @@ recruit_by_trip2 %>%
   summarise(ntrip = n(), mean_percentR = mean(percent), sd_percentR = sd(percent)) -> recruits.20
 
 diff <- recruits$mean_percentR - recruits.20$mean_percentR
+
+
+## percent recruit with SD for graphing -------
+head(recruits) # see line 45 for code to create this 
+
+#only East Central
+recruits %>% 
+  filter(I_FISHERY == "East Central GKC") -> recruits_EC
+ggplot(recruits_EC, aes(YEAR, mean_percentR)) + 
+  geom_line() +
+  geom_point() +
+  geom_errorbar(aes(ymin = mean_percentR - sd_percentR, ymax = mean_percentR + sd_percentR), 
+                width = 0.2, position = position_dodge(0.05))
