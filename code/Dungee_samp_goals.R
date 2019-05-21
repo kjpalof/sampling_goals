@@ -50,10 +50,10 @@ recruit_by_trip2 %>%
   summarise(ntrip = n(), mean_percentR = mean(percent), sd_percentR = sd(percent)) -> recruits
 
 recruits %>%
-  filter(SEASON == "Sep2016 - Aug17")
+  filter(SEASON == "Apr2018 - Mar19")
 
 # Power analysis --------------
-# t-test - one sample
+# t-test - one sample - example
 tidy(pwr.t.test( d= (0.10/0.164196), sig.level = 0.05, power = 0.85, type = "one.sample", alternative = "two.sided"))
 
 # d is difference to detect which is the difference / S.D.
