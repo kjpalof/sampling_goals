@@ -5,6 +5,10 @@
 # power analysis to determine the number of trips to sample from each management area
 #         to detect change in % recruits from port sampling/dockside data
 
+# for git to work had to set user.name and e-mail 
+# open "shell" under more. 
+# git config --user.name "kjpalof"
+# git config --user.email "katie.palof@alaska.gov"
 
 ### Dungeness Crab --------------------
 
