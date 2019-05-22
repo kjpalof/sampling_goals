@@ -5,7 +5,6 @@
 # power analysis to determine the number of trips to sample from each management area
 #         to detect change in % recruits from port sampling/dockside data
 
-# test
 
 ### Dungeness Crab --------------------
 
