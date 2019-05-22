@@ -1,8 +1,8 @@
-#K.Palof ADF&G            udpated 2-1-18/ 5-21-19
-#objective: determine how many trips to sample for lengths in the crab fisheries (golden, tanner, 
+# K.Palof ADF&G            udpated 2-1-18/ 5-21-19
+# objective: determine how many trips to sample for lengths in the crab fisheries (golden, tanner, 
 #         and dungeness - seperately) to be able to tell if the % of recruits changes from year to year.
-#statistical objective: 
-#power analysis to determine the number of trips to sample from each management area
+# statistical objective: 
+# power analysis to determine the number of trips to sample from each management area
 #         to detect change in % recruits from port sampling/dockside data
 
 
