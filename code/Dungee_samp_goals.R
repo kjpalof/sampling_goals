@@ -59,28 +59,33 @@ tidy(pwr.t.test( d= (0.10/0.164196), sig.level = 0.05, power = 0.85, type = "one
 # d is difference to detect which is the difference / S.D.
 
 
-# using dplyr and broom
+# using dplyr and broom 
+# !! load function below first !!!
 recruits %>% na.omit() %>% 
   rowwise %>% 
   mutate(x0.10 = crab_power(0.10, sd_percentR), x0.08 = crab_power(0.08, sd_percentR), 
-         x0.06=crab_power(0.06, sd_percentR))-> recruits_pow
+         x0.06=crab_power(0.06, sd_percentR)) %>% 
+  mutate(year = as.factor(SEASON) )-> recruits_pow
 # writing a function
 crab_power <- function(a, b){
   step1 <- pwr.t.test(d=(a/b), sig.level = 0.05, power = 0.85, type = "one.sample", alternative = "two.sided")
   step1$n
 }
-crab_power(0.10, recruits$sd_percentR[1])
+crab_power(0.10, recruits$sd_percentR[2])
 
 
-# power using average of last 3 years
-# this data set only has the last 3 years so no need for filtering.
-years3 <- c("Sep2014 - Aug15", "Sep2015 - Aug16", "Sep2016 - Aug17")
+# power using average of 5 years 
+# this data set only has the last 5 years so no need for filtering.
+unique(recruits_pow$SEASON)
+#years3 <- c("Sep2014 - Aug15", "Sep2015 - Aug16", "Sep2016 - Aug17")
 
 recruits_pow %>%
-  filter(SEASON %in% years3) %>%
+  as.data.frame() %>% 
   group_by(I_FISHERY) %>%
-  summarise (mean(x0.10), mean(x0.08), mean (x0.06))->last3_recuits_pow
+  summarise (mean(x0.10), mean(x0.08), mean (x0.06))->mean_recuits_pow
+
+# use the number of trips/landings to sample using a difference to detect of 0.10
 
 #save 
-write.csv(recruits_pow, file = "./output/TC_recruit_power_18.csv")
-write.csv(last3_recuits_pow, file = "./output/TC_last3years_sample_size_18.csv")
+write.csv(recruits_pow, file = "./output/DC_recruit_power_19.csv")
+write.csv(mean_recuits_pow, file = "./output/DC_last5years_sample_size_19.csv")
