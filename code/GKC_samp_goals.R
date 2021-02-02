@@ -1,4 +1,4 @@
-#K.Palof ADF&G                updated for 2018 goals 2-1-18
+#K.Palof ADF&G                updated for 2018 goals 2-1-18 / 2-1-2021 updates for 2021
 #objective: determine how many trips to sample for lenghts in the crab fisheries (golden, tanner, 
 #         and dungeness - seperately) to be able to tell if the % of recruits changes from year to year.
 #statistical objective: 
@@ -6,7 +6,7 @@
 #         to detect
 
 
-rm(list = ls()) # clear workspace since data frames have same names
+#rm(list = ls()) # clear workspace since data frames have same names
 #####Load Packages ---------------------------------
 library(tidyverse)
 library(pwr)
@@ -14,12 +14,13 @@ library(broom)
 
 #####Load Data ---------------------------------------------------
 # change input file for each
-dat <- read.csv("./data/gkc_dockside_13_16.csv")
-dat2 <- read.csv("./data/gkcdockside_17.csv")
+dat1 <- read.csv("./data/gkc_dockside_17_20.csv")
+#dat2 <- read.csv("./data/gkcdockside_17.csv")
 
 ##### Data manipulation ---------------
-# add 2017 data
-dat %>% bind_rows(dat2) -> dat3
+# add 2017 data - specific to 2018 goals 
+#dat1 %>% bind_rows(dat2) -> dat3
+dat1 -> dat3
 
 ### Summarise data by trip for the fishery, keep season, location (I_FISHERY), and trip # 
 #unique(dat$SEASON) use season NOT year
@@ -68,15 +69,16 @@ crab_power(0.10, recruits$sd_percentR[1])
 
   
 # power using average of last 3 years
-years3 <- c("Oct2014 - Sep15", "Oct2015 - Sep16", "Oct2016 - Sep17")
+#years3 <- c("Oct2014 - Sep15", "Oct2015 - Sep16", "Oct2016 - Sep17")
+years3 <- c("Oct2017 - Sep18", "Oct2018 - Sep19", "Oct2019 - Sep20")
 recruits_pow %>%
   filter(SEASON %in% years3) %>%
   group_by(I_FISHERY) %>%
   summarise (mean(x0.10), mean(x0.08), mean (x0.06))->last3_recuits_pow
 
 #save 
-write.csv(recruits_pow, file = "./output/GKCrecruit_power17.csv")
-write.csv(last3_recuits_pow, file = "./output/GKC_last3_power17.csv")
+write.csv(recruits_pow, file = "./output/GKCrecruit_power_2021.csv")
+write.csv(last3_recuits_pow, file = "./output/GKC_last3_power_2021.csv")
 ## crabs sampled per trip review ---------------------
 # currently set at 50, is there a minimium where the trip is not useful?
 ggplot(recruit_by_trip2, aes(tot_crab, percent)) +geom_point() +geom_smooth(method = "lm")
