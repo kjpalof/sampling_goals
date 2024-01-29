@@ -1,4 +1,5 @@
 #K.Palof ADF&G            udpated 2-1-18
+# updated 1-29-24 - look at GKC code for assistnace
 #objective: determin how many trips to sample for lenghts in the crab fisheries (golden, tanner, 
 #         and dungeness - seperately) to be able to tell if the % of recruits changes from year to year.
 #statistical objective: 
@@ -15,22 +16,25 @@ library(broom)
 
 #####Load Data ---------------------------------------------------
 # change input file for each
-dat <- read.csv("./data/tanner_dockside_13_16.csv")
-dat2 <- read.csv("./data/tannerdocside_17.csv")
+dat <- read.csv("./data/Tanner Dockside Biological Data by Specimen 2017-2023.csv")
+#dat2 <- read.csv("./data/tannerdocside_17.csv")
 
 ##### Data manipulation ---------------
 # add 2017 data
-dat %>% bind_rows(dat2) -> dat3
+#dat %>% bind_rows(dat2) -> dat3
+dat -> dat3 # for simplicity due to additions that were made in the past.
 
 ### Summarise data by trip for the fishery, keep season, location (I_FISHERY), and trip # 
 #unique(dat$SEASON) use season NOT year
 # all recruit classes by trip
 dat3 %>%
-  group_by(SEASON, I_FISHERY, DISTRICT, TRIP_NO, RECRUIT_STATUS) %>%
+  #group_by(SEASON, I_FISHERY, DISTRICT, TRIP_NO, RECRUIT_STATUS) %>%
+  group_by(Season, Invertebrate.Fishery, District, Trip.Number, Recruit.Status) %>% 
   summarise(N = n()) -> by_trip
 # total crab by trip
 by_trip %>%
-  group_by(SEASON, I_FISHERY, TRIP_NO)%>%
+  #group_by(SEASON, I_FISHERY, TRIP_NO)%>%
+  group_by(Season, Invertebrate.Fishery, Trip.Number) %>% 
   summarise(tot_crab = sum(N)) -> total_by_trip
 # % sampled of each recruit class by trip
 by_trip %>%
@@ -42,11 +46,12 @@ by_trip2 %>%
 # summarize by season and fishery area
 #       these match those calculated in .JMP files in previous years
 recruit_by_trip2 %>%
-  group_by(SEASON, I_FISHERY) %>%
+  #group_by(SEASON, I_FISHERY) %>%
+  group_by(Season, Invertebrate.Fishery) %>% 
   summarise(ntrip = n(), mean_percentR = mean(percent), sd_percentR = sd(percent)) -> recruits
 
-recruits %>%
-  filter(SEASON == "Sep2016 - Aug17")
+#recruits %>%
+#  filter(SEASON == "Sep2016 - Aug17")
 
 # Power analysis --------------
 # t-test - one sample
@@ -70,13 +75,13 @@ crab_power(0.10, recruits$sd_percentR[1])
 
 # power using average of last 3 years
 # this data set only has the last 3 years so no need for filtering.
-years3 <- c("Sep2014 - Aug15", "Sep2015 - Aug16", "Sep2016 - Aug17")
+#years3 <- c("Sep2014 - Aug15", "Sep2015 - Aug16", "Sep2016 - Aug17")
 
 recruits_pow %>%
-  filter(SEASON %in% years3) %>%
-  group_by(I_FISHERY) %>%
+  #filter(SEASON %in% years3) %>%
+  group_by(Invertebrate.Fishery) %>%
   summarise (mean(x0.10), mean(x0.08), mean (x0.06))->last3_recuits_pow
 
 #save 
-write.csv(recruits_pow, file = "./output/TC_recruit_power_18.csv")
-write.csv(last3_recuits_pow, file = "./output/TC_last3years_sample_size_18.csv")
+write.csv(recruits_pow, file = paste0("./output/TC_recruit_power_", cur_yr, ".csv"))
+write.csv(last3_recuits_pow, file = paste0("./output/TC_last3_sample_size_power_", cur_yr, ".csv"))
