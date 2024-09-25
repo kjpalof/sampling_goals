@@ -1,5 +1,5 @@
 #K.Palof ADF&G            udpated 2-1-18
-# updated 1-29-24 - look at GKC code for assistnace
+# updated 1-29-24 - look at GKC code for assistance
 #objective: determin how many trips to sample for lenghts in the crab fisheries (golden, tanner, 
 #         and dungeness - seperately) to be able to tell if the % of recruits changes from year to year.
 #statistical objective: 
